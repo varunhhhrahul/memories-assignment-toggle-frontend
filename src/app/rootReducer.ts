@@ -1,10 +1,10 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import alertReducer from "../slices/alertSlice";
-// import characterReducer from "../slices/characterSlice";
+import authReducer from "../slices/authSlice";
 
 const rootReducer = combineReducers({
   alert: alertReducer,
-  // character: characterReducer,
+  auth: authReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

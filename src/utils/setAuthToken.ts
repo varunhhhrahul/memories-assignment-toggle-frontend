@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { API } from "../api/api";
 
-const setAuthToken = async (token?: string) => {
+const setAuthToken = async (token: string | null) => {
   if (token) {
     // Apply to every request
     API.defaults.headers.common["Authorization"] = await `Bearer ${token}`;
