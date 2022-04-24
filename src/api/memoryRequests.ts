@@ -1,4 +1,4 @@
-import { MemoryType, Privacy, Memory } from "../constants/models/Memory";
+import { Memory } from "../constants/models/Memory";
 import { MEMORY } from "../constants/routes";
 import { API } from "./api";
 
@@ -38,8 +38,8 @@ export const getMemoryById = async (id: string) => {
 export const createMemory = async (
   name: string,
   url: string,
-  memoryType: MemoryType,
-  privacy: Privacy
+  memoryType: string,
+  privacy: string
 ) => {
   try {
     const res = await API.post<{ success: true; data: Memory }>(`/${MEMORY}`, {
@@ -58,8 +58,8 @@ export const updateMemory = async (
   id: string,
   name: string,
   url: string,
-  memoryType: MemoryType,
-  privacy: Privacy
+  memoryType: string,
+  privacy: string
 ) => {
   try {
     const res = await API.put<{ success: true; data: Memory }>(
