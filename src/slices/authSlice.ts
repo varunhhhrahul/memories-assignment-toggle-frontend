@@ -1,4 +1,4 @@
-import { History } from "history";
+import { NavigateFunction } from "react-router-dom";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../app/store";
 import * as REQUESTS from "../api/authRequests";
@@ -84,13 +84,18 @@ export const loadUser = (): AppThunk => async (dispatch) => {
 
 //register user
 export const register =
-  (name: string, email: string, phone: string, history: History): AppThunk =>
+  (
+    name: string,
+    email: string,
+    phone: string,
+    navigate: NavigateFunction
+  ): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(authStart());
       const data = await REQUESTS.register(name, email, phone);
       dispatch(authComplete());
-      history.push(LOGIN);
+      navigate(LOGIN);
       dispatch(setSuccessMsg("Registration successful"));
     } catch (err: any) {
       dispatch(setErrorMsg(err.response.data.error));
@@ -99,14 +104,14 @@ export const register =
 
 //login user
 export const login =
-  (phone: string, history: History): AppThunk =>
+  (phone: string, navigate: NavigateFunction): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(authStart());
       dispatch(setPhone(phone));
       const data = await REQUESTS.login(phone);
       dispatch(authComplete());
-      history.push(VERIFY_OTP);
+      navigate(VERIFY_OTP);
       dispatch(setSuccessMsg("OTP sent"));
     } catch (err: any) {
       dispatch(setErrorMsg(err.response.data.error));
@@ -115,7 +120,7 @@ export const login =
 
 //verify user otp
 export const verifyOtp =
-  (otp: string, history: History): AppThunk =>
+  (otp: string, navigate: NavigateFunction): AppThunk =>
   async (dispatch, getState) => {
     try {
       dispatch(authStart());
@@ -125,9 +130,17 @@ export const verifyOtp =
       dispatch(setToken(data));
       dispatch(loadUser());
       dispatch(authComplete());
-      history.push(DASHBOARD);
+      navigate(DASHBOARD);
       dispatch(setSuccessMsg("Logged in successfully"));
     } catch (err: any) {
       dispatch(setErrorMsg(err.response.data.error));
     }
   };
+
+//logout
+export const logout = (): AppThunk => async (dispatch) => {
+  await REQUESTS.logout();
+  dispatch(setLogout());
+
+  dispatch(setSuccessMsg("Logged out successfully"));
+};

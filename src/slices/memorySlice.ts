@@ -1,4 +1,4 @@
-import { History } from "history";
+import { NavigateFunction } from "react-router-dom";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Memory } from "../constants/models/Memory";
 import { AppThunk } from "../app/store";
@@ -101,7 +101,7 @@ export const addMemory =
     url: string,
     memoryType: string,
     privacy: string,
-    history: History
+    navigate: NavigateFunction
   ): AppThunk =>
   async (dispatch) => {
     try {
@@ -111,7 +111,7 @@ export const addMemory =
       dispatch(setSuccessMsg("Memory added successfully"));
       dispatch(getMyMemories());
       dispatch(getAllPublicMemories());
-      history.push(DASHBOARD);
+      navigate(DASHBOARD);
       dispatch(memoryComplete());
     } catch (err: any) {
       dispatch(setErrorMsg(err.response.data.error));
@@ -126,7 +126,7 @@ export const updateMemory =
     url: string,
     memoryType: string,
     privacy: string,
-    history: History
+    navigate: NavigateFunction
   ): AppThunk =>
   async (dispatch) => {
     try {
@@ -142,7 +142,7 @@ export const updateMemory =
       dispatch(getMyMemories());
       dispatch(getAllPublicMemories());
       dispatch(setSuccessMsg("Memory updated successfully"));
-      history.push(DASHBOARD);
+      navigate(DASHBOARD);
       dispatch(memoryComplete());
     } catch (err: any) {
       dispatch(setErrorMsg(err.response.data.error));
