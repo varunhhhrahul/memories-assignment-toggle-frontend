@@ -20,6 +20,7 @@ import {
   VERIFY_OTP,
   MEMORY_CREATE,
   MEMORY_EDIT,
+  MEMORY_LIST,
 } from "../constants/routes";
 import { loadUser } from "../slices/authSlice";
 import { Navbar } from "../components/Navbar";
@@ -29,16 +30,17 @@ import { VerifyOtp } from "../features/Auth/VerifyOtp/VerifyOtp";
 import PrivateRoute from "../components/PrivateRoute";
 import { Dashboard } from "../features/Dashboard/Dashboard";
 import { AddOrEditMemory } from "../features/Dashboard/AddOrEditMemory/AddOrEditMemory";
+import { PublicMemoriesDashboard } from "../features/Dashboard/PublicMemoriesDashboard";
 
 function App() {
-  // useEffect(() => {
-  //   (async () => {
-  //     if (localStorage.token) {
-  //       await setAuthToken(localStorage.token);
-  //       store.dispatch(loadUser() as unknown as AnyAction);
-  //     }
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      if (localStorage.token) {
+        await setAuthToken(localStorage.token);
+        store.dispatch(loadUser() as unknown as AnyAction);
+      }
+    })();
+  }, []);
   return (
     <Provider store={store}>
       <AlertProvider template={AlertTemplate}>
@@ -70,6 +72,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <AddOrEditMemory />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path={MEMORY_LIST}
+              element={
+                <PrivateRoute>
+                  <PublicMemoriesDashboard />
                 </PrivateRoute>
               }
             />

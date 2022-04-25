@@ -1,14 +1,17 @@
 import React from "react";
 
-import { useSelector, shallowEqual } from "react-redux";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { FormikProps, ErrorMessage } from "formik";
 import ReactPlayer from "react-player";
 import { Row, Col, Input, Card, Button, Radio } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+
 import { EnhancedAddOrEditMemoryFormValues } from "./EnhancedAddorEditMemoryForm";
 import { REGISTER } from "../../../constants/routes";
 
 import { RootState } from "../../../app/rootReducer";
+import { setErrorMsg } from "../../../slices/alertSlice";
 
 interface IFormProps {}
 
@@ -16,8 +19,15 @@ export const AddOrEditMemoryForm: React.FC<
   IFormProps & FormikProps<EnhancedAddOrEditMemoryFormValues>
 > = (props) => {
   const navigate = useNavigate();
-  const { values, errors, touched, handleSubmit, handleBlur, handleChange } =
-    props;
+  const {
+    values,
+    errors,
+    touched,
+    handleSubmit,
+    handleBlur,
+    handleChange,
+    setFieldValue,
+  } = props;
 
   const { loading, memory } = useSelector((state: RootState) => {
     return {
@@ -25,10 +35,33 @@ export const AddOrEditMemoryForm: React.FC<
       memory: state.memory.memory,
     };
   }, shallowEqual);
-
+  const dispatch = useDispatch();
   const handleRegisterSubmit = (e: any) => {
     e.preventDefault();
     handleSubmit();
+  };
+  const openCloudWidget = () => {
+    // @ts-ignore
+    window.cloudinary
+      .createUploadWidget(
+        {
+          cloudName: "gamers-world",
+          uploadPreset: "r26tykft",
+          // resourceType: ["image", "video"],
+        },
+        (error: any, result: any) => {
+          if (!error && result && result.event === "success") {
+            console.log(result);
+            if (["image", "video"].includes(result.info.resource_type)) {
+              setFieldValue("url", result.info.secure_url);
+              setFieldValue("memoryType", result.info.resource_type);
+            } else {
+              dispatch(setErrorMsg("Please upload an image or video"));
+            }
+          }
+        }
+      )
+      .open();
   };
   return (
     <Row>
@@ -76,7 +109,8 @@ export const AddOrEditMemoryForm: React.FC<
                 onBlur={handleBlur}
                 status={touched.url && errors.url ? "error" : undefined}
                 placeholder="Enter url"
-                // readOnly
+                readOnly
+                addonAfter={<UploadOutlined onClick={openCloudWidget} />}
               />
               <ErrorMessage
                 name="url"
@@ -85,13 +119,14 @@ export const AddOrEditMemoryForm: React.FC<
                 )}
               />
             </div>
-            <div style={{ marginTop: "0.5rem" }}>
+            {/* <div style={{ marginTop: "0.5rem" }}>
               <label htmlFor="memoryType" style={{ marginRight: "1rem" }}>
                 Type
               </label>
 
               <Radio.Group
                 name="memoryType"
+                // disabled={values.url !== ""}
                 options={[
                   { label: "Image", value: "image" },
                   { label: "Video", value: "video" },
@@ -107,7 +142,7 @@ export const AddOrEditMemoryForm: React.FC<
                   <div style={{ color: "red" }}>{msg}</div>
                 )}
               />
-            </div>
+            </div> */}
             <div style={{ marginTop: "0.5rem" }}>
               <label htmlFor="privacy" style={{ marginRight: "1rem" }}>
                 Privacy
@@ -164,6 +199,7 @@ export const AddOrEditMemoryForm: React.FC<
               >
                 <ReactPlayer
                   url={values.url}
+                  controls
                   style={{ position: "absolute", top: -150, left: 0 }}
                 />
               </div>
