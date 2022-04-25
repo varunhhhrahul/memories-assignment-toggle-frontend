@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AnyAction } from "redux";
 import { RootState } from "../../app/rootReducer";
 import { MEMORY_CREATE } from "../../constants/routes";
-import { getMyMemories } from "../../slices/memorySlice";
+import { getMyMemories, setMemory } from "../../slices/memorySlice";
 
 const { TabPane } = Tabs;
 interface DashboardProps {}
@@ -52,7 +52,8 @@ export const Dashboard: React.FC<DashboardProps> = (props) => {
             <div style={{ float: "right" }}>
               <Button
                 type="primary"
-                onClick={() => {
+                onClick={async () => {
+                  await dispatch(setMemory(null));
                   navigate(MEMORY_CREATE);
                 }}
               >
