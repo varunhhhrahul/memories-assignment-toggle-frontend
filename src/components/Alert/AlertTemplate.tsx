@@ -18,7 +18,13 @@ const Message: React.FC<IMessageProps> = ({
   const [open] = useState(true);
 
   return (
-    <Alert type={severity} onClose={handleClose} showIcon message={message} />
+    <Alert
+      style={{ margin: "1rem" }}
+      type={severity}
+      onClose={handleClose}
+      showIcon
+      message={message}
+    />
   );
 };
 

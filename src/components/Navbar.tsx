@@ -32,7 +32,7 @@ export const Navbar: React.FC<NavbarProps> = (props) => {
             },
           },
           {
-            label: "Public Memories",
+            label: "Friends Memories",
             key: "memories",
             onClick: () => {
               navigate(MEMORY_LIST);

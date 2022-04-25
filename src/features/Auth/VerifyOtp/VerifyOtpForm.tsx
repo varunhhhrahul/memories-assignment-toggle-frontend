@@ -4,15 +4,15 @@ import { useSelector, shallowEqual } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { FormikProps, ErrorMessage } from "formik";
 import { Row, Col, Input, Card, Button } from "antd";
-import { EnhancedLoginFormValues } from "./EnhancedLoginForm";
+import { EnhancedVerifyOtpFormValues } from "./EnhancedVerifyOtpForm";
 import { REGISTER } from "../../../constants/routes";
 
 import { RootState } from "../../../app/rootReducer";
 
 interface IFormProps {}
 
-export const LoginForm: React.FC<
-  IFormProps & FormikProps<EnhancedLoginFormValues>
+export const VerifyOtpForm: React.FC<
+  IFormProps & FormikProps<EnhancedVerifyOtpFormValues>
 > = (props) => {
   const navigate = useNavigate();
   const { values, errors, touched, handleSubmit, handleBlur, handleChange } =
@@ -23,8 +23,9 @@ export const LoginForm: React.FC<
       authLoading: state.auth.loading,
     };
   }, shallowEqual);
+  
 
-  const handleLoginSubmit = (e: any) => {
+  const handleVerifyOtpSubmit = (e: any) => {
     e.preventDefault();
     handleSubmit();
   };
@@ -39,21 +40,21 @@ export const LoginForm: React.FC<
           alignItems: "center",
         }}
       >
-        <Card title="Login" bordered style={{ width: 300 }}>
-          <form onSubmit={handleLoginSubmit}>
-            <label htmlFor="phone">Phone</label>
+        <Card title="Verify OTP" bordered style={{ width: 300 }}>
+          <form onSubmit={handleVerifyOtpSubmit}>
+            <label htmlFor="otp">OTP</label>
 
             <Input
               style={{ width: "100%" }}
-              value={values.phone}
-              name="phone"
+              value={values.otp}
+              name="otp"
               onChange={handleChange}
               onBlur={handleBlur}
-              status={touched.phone && errors.phone ? "error" : undefined}
-              placeholder="Enter Phone"
+              status={touched.otp && errors.otp ? "error" : undefined}
+              placeholder="Enter otp"
             />
             <ErrorMessage
-              name="phone"
+              name="otp"
               render={(msg?: string) => (
                 <div style={{ color: "red" }}>{msg}</div>
               )}
