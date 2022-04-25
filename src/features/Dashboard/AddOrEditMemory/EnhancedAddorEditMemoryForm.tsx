@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { withFormik } from "formik";
 import { connect } from "react-redux";
 import * as Yup from "yup";
@@ -70,7 +71,7 @@ const EnhancedAddOrEditMemoryForm = withFormik<
   validationSchema: Yup.object().shape({
     name: Yup.string().required("Title for memory is required"),
 
-    url: Yup.string().required("URL is required"),
+    url: Yup.string().required("Please upload a photo or video"),
     memoryType: Yup.string()
       .oneOf(["image", "video"])
       .required("Memory Type is required"),
@@ -82,9 +83,7 @@ const EnhancedAddOrEditMemoryForm = withFormik<
   handleSubmit: (values, { setSubmitting, props }) => {
     const { addMemory, updateMemory, memory, navigate } = props;
     const { name, url, memoryType, privacy } = values;
-    // register(name, email, phone, navigate);
     if (memory) {
-      // eslint-disable-next-line no-underscore-dangle
       updateMemory(memory._id, name, url, memoryType, privacy, navigate);
     } else {
       addMemory(name, url, memoryType, privacy, navigate);

@@ -21,32 +21,22 @@ export const MemoryItem: React.FC<MemoryItemProps> = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
-    <Col span={4} key={memory._id} style={{ margin: "1rem" }}>
+    <Col
+      xs={{ span: 12, offset: 1 }}
+      sm={{ span: 8, offset: 1 }}
+      md={{ span: 6, offset: 1 }}
+      lg={{ span: 4, offset: 2 }}
+      key={memory._id}
+      style={{
+        margin: "1rem",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+      }}
+    >
       <Card
         title={memory.name}
-        extra={
-          !isPublic && (
-            <div style={{ marginLeft: "1rem" }}>
-              <Button
-                type="ghost"
-                onClick={async () => {
-                  await dispatch(setMemory(memory));
-                  navigate(MEMORY_EDIT);
-                }}
-              >
-                Edit
-              </Button>
-              <Button
-                type="ghost"
-                onClick={async () => {
-                  dispatch(deleteMemory(memory._id) as unknown as AnyAction);
-                }}
-              >
-                Delete
-              </Button>
-            </div>
-          )
-        }
         style={{
           width: "100%",
           margin: "1rem",
@@ -57,14 +47,43 @@ export const MemoryItem: React.FC<MemoryItemProps> = ({
           flexDirection: "column",
         }}
       >
+        {!isPublic && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+            }}
+          >
+            <Button
+              type="ghost"
+              onClick={async () => {
+                await dispatch(setMemory(memory));
+                navigate(MEMORY_EDIT);
+              }}
+            >
+              Edit
+            </Button>
+            <Button
+              type="ghost"
+              onClick={async () => {
+                dispatch(deleteMemory(memory._id) as unknown as AnyAction);
+              }}
+            >
+              Delete
+            </Button>
+          </div>
+        )}
+        <br />
         {memory.memoryType === "image" ? (
           <img
             src={memory.url}
             alt="memory"
-            style={{ width: 200, height: 200 }}
+            style={{ width: 150, height: 150 }}
           />
         ) : (
-          <ReactPlayer url={memory.url} width={200} height={200} controls />
+          <ReactPlayer url={memory.url} width={150} height={150} controls />
         )}
         {isPublic && (
           <>
